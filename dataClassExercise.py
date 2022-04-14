@@ -62,7 +62,7 @@ for x in range(0, len(houseDict)):
         houseDict[x]['founder'],houseDict[x]['animal'],houseDict[x]['element'],houseDict[x]['ghost'],houseDict[x]['commonRoom'])
     houseList.append(aHouse)
 
-
+#Populate ingredientList with Ingredient objects
 responseIngre = requests.get("https://wizard-world-api.herokuapp.com/Ingredients")
 
 ingres = responseIngre.json()
@@ -70,11 +70,18 @@ ingredientList = []
 for i in ingres:
    ingredientList.append(Ingredients(i["id"], i["name"]))
 
+#Populate elixirList with Elixir objects
 responseElix = requests.get("https://wizard-world-api.herokuapp.com/Elixirs")
-
 
 elixs = responseElix.json()
 elixirList = []
 for i in elixs:
    elixirList.append(Elixir(i["id"], i["name"], i["difficulty"], i["ingredients"], i["inventors"], i["manufacturer"],
                             i["effect"], i["sideEffects"], i["characteristics"]))
+
+#Populate wizardList with Wizard objects
+response = requests.get("https://wizard-world-api.herokuapp.com/Wizards")
+wizardDict = response.json()
+wizardList = []
+for i in wizardDict:
+    wizardList.append(Wizard(i['id'], i['firstName'], i['lastName']))

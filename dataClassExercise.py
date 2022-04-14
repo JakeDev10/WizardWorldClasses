@@ -9,6 +9,9 @@ class Elixir:
     ingredient: str
     inventorFullName: str
     manufacturer: str
+    effect: str
+    sideEffects: str
+    characteristics: str
 
 @dataclass
 class House:
@@ -22,7 +25,7 @@ class House:
     commonRoom: str
 
 @dataclass
-class Ingredient:
+class Ingredients:
     id: str
     name: str
 
@@ -47,7 +50,7 @@ spellDict = response.json()
 spellList = []
 for x in range(0, len(spellDict)):
     aSpell = Spell(spellDict[x]['id'], spellDict[x]['name'], spellDict[x]['type'],
-    spellDict[x]['incantation'],spellDict[x]['effect'],spellDict[x]['canBeVerbal'])
+        spellDict[x]['incantation'],spellDict[x]['effect'],spellDict[x]['canBeVerbal'])
     spellList.append(aSpell)
 
 #fill houseList with House objects
@@ -56,16 +59,22 @@ houseDict = response.json()
 houseList = []
 for x in range(0, len(houseDict)):
     aHouse = House(houseDict[x]['id'],houseDict[x]['name'],houseDict[x]['houseColours'],
-    houseDict[x]['founder'],houseDict[x]['animal'],houseDict[x]['element'],houseDict[x]['ghost'],houseDict[x]['commonRoom'])
+        houseDict[x]['founder'],houseDict[x]['animal'],houseDict[x]['element'],houseDict[x]['ghost'],houseDict[x]['commonRoom'])
     houseList.append(aHouse)
 
-#fill elixirList with Elixir objects
-response = requests.get("https://wizard-world-api.herokuapp.com/Elixirs")
-elixirDict = response.json()
+
+responseIngre = requests.get("https://wizard-world-api.herokuapp.com/Ingredients")
+
+ingres = responseIngre.json()
+ingredientList = []
+for i in ingres:
+   ingredientList.append(Ingredients(i["id"], i["name"]))
+
+responseElix = requests.get("https://wizard-world-api.herokuapp.com/Elixirs")
+
+
+elixs = responseElix.json()
 elixirList = []
-print(elixirDict[0])
-#for x in range(0, len(elixirDict)):
-#    anElixir = Elixir(houseDict[x]['id'],houseDict[x]['name'],houseDict[x]['houseColours'],
-#    houseDict[x]['founder'],houseDict[x]['animal'],houseDict[x]['element'],houseDict[x]['ghost'],houseDict[x]['commonRoom'])
-#    houseList.append(aHouse)
-#print(elixirList[0])
+for i in elixs:
+   elixirList.append(Elixir(i["id"], i["name"], i["difficulty"], i["ingredients"], i["inventors"], i["manufacturer"],
+                            i["effect"], i["sideEffects"], i["characteristics"]))
